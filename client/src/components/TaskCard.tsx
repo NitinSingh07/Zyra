@@ -7,12 +7,6 @@ interface TaskCardProps {
   onStatusChange: (taskId: string, newStatus: Task["status"]) => void;
 }
 
-const STATUS_OPTIONS: { value: Task["status"]; label: string }[] = [
-  { value: "todo", label: "To Do" },
-  { value: "in_progress", label: "In Progress" },
-  { value: "completed", label: "Completed" },
-];
-
 const PRIORITY_ICONS: Record<Task["priority"], string> = {
   urgent: "🔴",
   high: "🟠",
@@ -61,9 +55,7 @@ export default function TaskCard({ task, onStatusChange }: TaskCardProps) {
           </span>
           <h4 className="task-title">{task.title}</h4>
         </div>
-        <span
-          className={`priority-badge priority-${task.priority}`}
-        >
+        <span className={`priority-badge priority-${task.priority}`}>
           {task.priority}
         </span>
       </div>
@@ -79,7 +71,7 @@ export default function TaskCard({ task, onStatusChange }: TaskCardProps) {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -95,20 +87,29 @@ export default function TaskCard({ task, onStatusChange }: TaskCardProps) {
 
         <div className="task-status-control">
           {error && <span className="task-error">{error}</span>}
-          <select
-            className={`status-select status-${task.status}`}
-            value={task.status}
-            onChange={(e) =>
-              handleStatusChange(e.target.value as Task["status"])
-            }
-            disabled={updating}
-          >
-            {STATUS_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="status-capsule-row">
+            <button
+              className={`status-capsule-btn ${task.status === "todo" ? "active-todo" : ""}`}
+              onClick={() => handleStatusChange("todo")}
+              disabled={updating}
+            >
+              Todo
+            </button>
+            <button
+              className={`status-capsule-btn ${task.status === "in_progress" ? "active-in_progress" : ""}`}
+              onClick={() => handleStatusChange("in_progress")}
+              disabled={updating}
+            >
+              Active
+            </button>
+            <button
+              className={`status-capsule-btn ${task.status === "completed" ? "active-completed" : ""}`}
+              onClick={() => handleStatusChange("completed")}
+              disabled={updating}
+            >
+              Done
+            </button>
+          </div>
         </div>
       </div>
     </div>
